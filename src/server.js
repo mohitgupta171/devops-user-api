@@ -142,7 +142,26 @@ app.post("/users", async (req, res) => {
   }
 });
 
-app.listen(port, "0.0.0.0", () => {
+const server = app.listen(port, "0.0.0.0", () => {
   console.log(`API listening on port ${port}`);
 });
 
+async function gracefulShutdown(signal) {
+  console.log(`${signal} received. Shutting down gracefully.`);
+
+  server.close(async () => {
+    console.log("HTTP server closed.");
+
+    try {
+      await pool.end();
+      console.log("PostgreSQL connection pool closed.");
+      process.exit(0);
+    } catch (error) {
+      console.error("Error closing PostgreSQL pool:", error);
+      process.exit(1);
+    }
+  });
+}
+
+process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
+process.on("SIGINT", () => gracefulShutdown("SIGINT"));
