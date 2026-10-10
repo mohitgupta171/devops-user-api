@@ -21,11 +21,12 @@ shared Docker network.
 
 | Method | Endpoint | Purpose |
 |---|---|---|
-| GET | /health | API health check |
-| GET | /users | List users |
-| POST | /users | Create a user |
-| GET | /users/:id | Retrieve a user |
-| DELETE | /users/:id | Delete a user |
+- `GET /health/live` — checks whether the API responds.
+- `GET /health/ready` — checks database connectivity.
+- `GET /users` — lists all users.
+- `GET /users/:id` — retrieves a user by ID.
+- `POST /users` — creates a user.
+- `DELETE /users/:id` — deletes a user.
 
 ## Run Locally
 
@@ -62,3 +63,10 @@ connectivity, containerization, service discovery, and persistent storage.
 Production hardening, automated tests, CI/CD, Kubernetes deployment,
 and monitoring will be added in later phases.
 
+
+## Health Checks
+
+- The API container uses Docker health checks against `/health/live`.
+- PostgreSQL uses `pg_isready` to check whether the server accepts connections.
+- The API readiness endpoint runs `SELECT 1` to verify database connectivity.
+- Docker health status reports container health; it does not automatically restart an unhealthy container.

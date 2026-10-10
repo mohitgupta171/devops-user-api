@@ -8,8 +8,25 @@ const port = process.env.PORT || 3000;
 
 app.use(express.json());
 
-app.get("/health", (req, res) => {
-  res.status(200).json({ status: "ok" });
+app.get("/health/live", (req, res) => {
+  res.status(200).json({ status: "alive" });
+});
+
+app.get("/health/ready", async (req, res) => {
+  try {
+    await pool.query("SELECT 1");
+
+    return res.status(200).json({
+      status: "ready",
+      database: "connected",
+    });
+  } catch (error) {
+    console.error("Readiness check failed:", error.message);
+
+    return res.status(503).json({
+      status: "not ready",
+    });
+  }
 });
 
 app.get("/users", async (req, res) => {
@@ -92,7 +109,6 @@ app.delete("/users/:id", async (req, res) => {
     });
   }
 });
-
 
 
 app.post("/users", async (req, res) => {
