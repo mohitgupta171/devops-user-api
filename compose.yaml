@@ -1,0 +1,35 @@
+services:
+  api:
+    build: .
+    image: devops-user-api:1.0
+    environment:
+      PORT: 3000
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: userdb
+      DB_USER: appuser
+      DB_PASSWORD: localdevpassword
+    ports:
+      - "127.0.0.1:3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: userdb
+      POSTGRES_USER: appuser
+      POSTGRES_PASSWORD: localdevpassword
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U appuser -d userdb"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  postgres_data:
