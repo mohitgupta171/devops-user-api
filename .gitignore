@@ -1,2 +1,21 @@
+
+# Node.js dependencies
 node_modules/
+
+# Environment variables and secrets
 .env
+.env.*
+!.env.example
+
+# Debug logs
+npm-debug.log*
+*.log
+
+# Local editor and OS files
+.vscode/
+.DS_Store
+
+# Terraform local state and working directory
+.terraform/
+*.tfstate
+*.tfstate.*
