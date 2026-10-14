@@ -28,6 +28,10 @@ jobs:
           node --check src/server.js
           node --check src/db.js
 
+      - name: Simulate validation failure
+        run: |
+          echo "Simulating a validation failure"
+          exit 1
 
   build:
     name: Build Docker image
