@@ -27,3 +27,6 @@ jobs:
         run: |
           node --check src/server.js
           node --check src/db.js
+
+      - name: Build Docker image
+        run: docker build -t devops-user-api:ci .
