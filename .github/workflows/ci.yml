@@ -28,5 +28,15 @@ jobs:
           node --check src/server.js
           node --check src/db.js
 
+
+  build:
+    name: Build Docker image
+    needs: validate
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Build Docker image
         run: docker build -t devops-user-api:ci .
