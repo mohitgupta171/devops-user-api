@@ -1,0 +1,17 @@
+name: Hello World
+
+on:
+  push:
+
+jobs:
+  greet:
+    runs-on: ubuntu-latest
+
+    steps: 
+    - name: Print greetings
+      run: echo "Hello from Github Actions!"
+
+    - name: Print date and OS
+      run: |
+          date
+          uname -s
